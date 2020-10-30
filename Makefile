@@ -1,3 +1,5 @@
+UNTAPPD_API_BASE_URL ?= https://api.untappd.com/v4
+
 .PHONY: start_neo4j
 start_neo4j:
 	neo4j start
@@ -7,8 +9,8 @@ setup:
 	if ! which install-peerdeps 2>/dev/null; then npm install -g install-peerdeps; fi
 	npm install
 
-.PHONY: install_all_peer_dependencies
-install_all_peer_dependencies: setup
+.PHONY: install_peer_dependencies
+install_peer_dependencies: setup
 	rm -f peerDeps.txt
 	for packName in $$(cat package.json | jq -r '.dependencies | keys[]' | tr '\n' ' '); do \
 		npm info "$${packName}@latest" peerDependencies --json | jq -r '. | keys[]' >> peerDeps.txt; \
@@ -23,3 +25,7 @@ install_all_peer_dependencies: setup
 		fi; \
 	done < peerDepsUniq.txt
 	rm -f peerDeps.txt peerDepsUniq.txt
+
+.PHOMY: get_beers
+get_beers:
+	curl -k -X GET $(UNTAPPD_API_BASE_URL)/user/beers/mcgrewgs
