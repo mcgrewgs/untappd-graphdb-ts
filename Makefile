@@ -29,14 +29,15 @@ install_peer_dependencies: setup
 	done < peerDepsUniq.txt
 	rm -f peerDeps.txt peerDepsUniq.txt
 
-.PHOMY: get_beers
-get_beers:
-	curl -k -X GET $(UNTAPPD_API_BASE_URL)/user/beers/mcgrewgs
+.PHONY: build
+build:
+	npx tsc src/script.ts
 
 .PHONY: run
-run:
-	if [[ ! -e cache.json ]]; then echo '{}' > cache.json; fi
-	npx tsc src/script.ts
+run: build
 	node src/script.js
-	# node src/script.js > run.out
-	# cat run.out | jq -S '.' > run.out.json
+
+.PHONY: run_json
+run_json: build
+	node src/script.js | tee run.out
+	cat run.out | jq -S '.' > run.out.json

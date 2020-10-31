@@ -1,6 +1,13 @@
 // import { readFileSync, writeFileSync } from "fs";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { ResponseUser, UntappdUserResponse } from "./UntappdUserResponseModel";
+import {
+    ResponseUser,
+    UntappdUserResponseWithMetadata,
+} from "./model/UntappdUserResponseModel";
+import {
+    UntappdBeersResponseWithMetadata,
+    BeerWithRating,
+} from "./model/UntappdBeersResponseModel";
 
 // const cacheFileName = process.env.UNTAPPD_API_CALL_CACHE_FILE;
 // const cacheFileEncoding = "utf-8";
@@ -67,6 +74,17 @@ export function UntappdGet<T>(
 
 export function GetUser(username: string): Promise<ResponseUser> {
     return UntappdGet<ResponseUser>(`/user/info/${username}`, (resp) => {
-        return (resp.data as UntappdUserResponse).response.user as ResponseUser;
+        return (resp.data as UntappdUserResponseWithMetadata).response
+            .user as ResponseUser;
     });
+}
+
+export function GetUserTopBeers(username: string): Promise<BeerWithRating[]> {
+    return UntappdGet<BeerWithRating[]>(
+        `/user/beers/${username}?limit=50&offset=0&sort=highest_rated_you`,
+        (resp) => {
+            return (resp.data as UntappdBeersResponseWithMetadata).response
+                .beers.items;
+        }
+    );
 }
