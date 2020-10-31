@@ -105,3 +105,9 @@ dist
 
 # package-lock.json
 package-lock.json
+cache.json
+
+# compiled versions of TypeScript files
+src/*.js
+*.out
+*.out.*

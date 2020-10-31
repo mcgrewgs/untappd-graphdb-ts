@@ -1,5 +1,8 @@
 UNTAPPD_API_BASE_URL ?= https://api.untappd.com/v4
 
+.PHONY: default
+default: run
+
 .PHONY: start_neo4j
 start_neo4j:
 	neo4j start
@@ -29,3 +32,11 @@ install_peer_dependencies: setup
 .PHOMY: get_beers
 get_beers:
 	curl -k -X GET $(UNTAPPD_API_BASE_URL)/user/beers/mcgrewgs
+
+.PHONY: run
+run:
+	if [[ ! -e cache.json ]]; then echo '{}' > cache.json; fi
+	npx tsc src/script.ts
+	node src/script.js
+	# node src/script.js > run.out
+	# cat run.out | jq -S '.' > run.out.json

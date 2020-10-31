@@ -9,6 +9,9 @@ declare global {
             UNTAPPD_API_BASE_URL: string;
             UNTAPPD_API_CLIENT_ID: string;
             UNTAPPD_API_CLIENT_SECRET: string;
+            UNTAPPD_API_CALL_CACHE_FILE: string;
+            UNTAPPD_API_CALL_CACHE_TTL: string;
+            UNTAPPD_DEFAULT_USERNAME: string;
         }
     }
 }
