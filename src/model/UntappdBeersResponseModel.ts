@@ -123,5 +123,5 @@ export interface Dates {
 export interface Pagination {
     max_id: boolean;
     next_url: string;
-    offset: number;
+    offset?: number;
 }

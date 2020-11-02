@@ -12,6 +12,7 @@ declare global {
             UNTAPPD_API_CALL_CACHE_FILE: string;
             UNTAPPD_API_CALL_CACHE_TTL: string;
             UNTAPPD_DEFAULT_USERNAME: string;
+            UNTAPPD_API_WAIT_TIME_MILLIS: string;
         }
     }
 }

@@ -31,13 +31,13 @@ install_peer_dependencies: setup
 
 .PHONY: build
 build:
-	npx tsc src/script.ts
+	npx tsc -p .
 
 .PHONY: run
 run: build
-	node src/script.js
+	node src/script.js | tee run.out
 
 .PHONY: run_json
 run_json: build
-	node src/script.js | tee run.out
+	node src/script.js > run.out
 	cat run.out | jq -S '.' > run.out.json
