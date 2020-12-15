@@ -116,23 +116,23 @@ async function CacheFriendsTopRatedBeersPaginated(
     return totalBeers;
 }
 
-CacheFriendsTopRatedBeersPaginated().then((i) => {
-    console.log(`Stored ${i} beers!`);
-    userRepo.getAllRatingsByUser().then((resp) => {
-        console.log(
-            JSON.stringify(
-                resp.map((r) => {
-                    return {
-                        user: r.user,
-                        rating: r.rating,
-                        count: r.beers.length,
-                    };
-                })
-            )
-        );
-    });
-});
+async function main(): Promise<void> {
+    const i = await CacheFriendsTopRatedBeersPaginated();
+    logger.log(`Stored ${i} beers!`);
+    const resp = await userRepo.getAllRatingsByUser();
+    logger.log(
+        JSON.stringify(
+            resp.map((r) => {
+                return {
+                    user: r.user,
+                    rating: r.rating,
+                    count: r.beers.length,
+                };
+            })
+        )
+    );
+}
 
-// GetBeerCheckins(15903).then((data: any) => {
-//     console.log(JSON.stringify(data));
-// });
+main().then(() => {
+    userRepo.cleanup();
+});

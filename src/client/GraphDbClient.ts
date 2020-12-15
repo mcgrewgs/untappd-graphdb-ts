@@ -13,8 +13,9 @@ function c(input: string): string {
 }
 
 export class UserRepository {
-    persistenceManager: NonTransactionalPersistenceManager;
+    public persistenceManager: NonTransactionalPersistenceManager;
     logger: Logger;
+    cleanedUp: boolean;
     constructor() {
         this.persistenceManager = new NonTransactionalPersistenceManager(
             DatabaseRegistry.buildOrResolveFromEnv("NEO"),
@@ -22,6 +23,14 @@ export class UserRepository {
             DatabaseType.NEO4J
         );
         this.logger = new Logger("UserRepository", true);
+        this.cleanedUp = false;
+    }
+
+    cleanup() {
+        if (!this.cleanedUp) {
+            this.cleanedUp = true;
+            this.persistenceManager.connectionProvider.end();
+        }
     }
 
     saveUser(user: GraphDbUntappdUser): Promise<any> {

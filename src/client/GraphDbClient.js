@@ -17,6 +17,13 @@ class UserRepository {
     constructor() {
         this.persistenceManager = new drivine_1.NonTransactionalPersistenceManager(drivine_1.DatabaseRegistry.buildOrResolveFromEnv("NEO"), "neo4j", drivine_1.DatabaseType.NEO4J);
         this.logger = new common_1.Logger("UserRepository", true);
+        this.cleanedUp = false;
+    }
+    cleanup() {
+        if (!this.cleanedUp) {
+            this.cleanedUp = true;
+            this.persistenceManager.connectionProvider.end();
+        }
     }
     saveUser(user) {
         const queryString = `MERGE (u:UntappdUser {user_name: '${user.user_name}'}) SET u += {first_name:'${c(user.first_name)}', last_name:'${c(user.last_name)}'} RETURN u`;
